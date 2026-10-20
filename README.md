@@ -23,6 +23,29 @@ python analysis.py
 
 Results are written to `results.json`. Figures are saved to `figures/`.
 
+## Results (latest run)
+
+On the procedural 2D refractive-circle caustic scene (16 held-out receiver bins, mean over seeds 42-44), plain unidirectional path tracing with area-light hits reached caustic-irradiance RMSE 0.0154 while manifold next event estimation reached 0.0122, a modest gain within seed standard deviations of 0.0030 and 0.0046.
+
+| Metric | Value |
+|---|---|
+| baseline_score | 0.01538 |
+| improved_score | 0.01219 |
+| improvement | 0.003185 |
+| baseline_score_std | 0.002974 |
+| improved_score_std | 0.004595 |
+| baseline_variance | 0.0001405 |
+| improved_variance | 0.0001355 |
+| baseline_time_s | 0.01977 |
+| improved_time_s | 1.065 |
+| selected_grid_K | 256 |
+| n_train_bins | 48 |
+| n_test_bins | 16 |
+
+Run on 2026-10-20. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: No training data: the split is over receiver bins (every 4th bin held out as test). The MNEE grid size is chosen on training bins with a pilot seed; the baseline has no tuned knob. The reference is MNEE with more samples, so it shares the estimator family and any bias of it. Ideal refraction only: no Fresnel terms, no radiance scaling. Folds (zero Jacobian) and missed or non-converged roots are dropped, which can bias both methods. Equal sample budget is not equal compute; times are reported separately. This is a stand-in for the paper's Vulkan implementation, and the paper's reported result is not stated, so no agreement with it is claimed.
+
 ## Reference
 
 This project is motivated by the following paper:
