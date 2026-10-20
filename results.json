@@ -1,0 +1,32 @@
+{
+  "question": "Does manifold next event estimation (solving the Snell-law constraint per light sample) give lower caustic-irradiance error than plain path tracing at an equal sample budget in a small 2D refractive-circle scene?",
+  "method": "Procedural 2D caustic simulation; equal per-bin sample budget; RMSE vs high-sample MNEE reference on held-out receiver bins; mean over seeds 42, 43, 44.",
+  "dataset": {
+    "name": "procedural 2D refractive-circle caustic scene (generated in numpy)",
+    "source_url": "none (generated in code)",
+    "n_rows": 64,
+    "n_train": 48,
+    "n_test": 16,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "RMSE of per-bin caustic irradiance vs high-sample reference (test bins, mean over seeds)",
+  "higher_is_better": false,
+  "baseline": "Plain unidirectional path tracing: uniform directions from each receiver bin, refracted twice by the circle, counted when they hit the area light.",
+  "improved": "Manifold next event estimation: for each sampled light point, Newton iterations on the entry-angle parameter solve the Snell-law path constraint; roots are weighted by the Jacobian dX/dphi and the receiver geometric term. Same samples, bins, and metric.",
+  "metrics": {
+    "baseline_score": 0.015379915928280178,
+    "improved_score": 0.012194980654999035,
+    "improvement": 0.0031849352732811424,
+    "baseline_score_std": 0.0029735419429580624,
+    "improved_score_std": 0.00459480981272242,
+    "baseline_variance": 0.00014049866935191588,
+    "improved_variance": 0.0001355269762955125,
+    "baseline_time_s": 0.019769827524820965,
+    "improved_time_s": 1.0653099219004314,
+    "selected_grid_K": 256.0,
+    "n_train_bins": 48.0,
+    "n_test_bins": 16.0
+  },
+  "notes": "No training data: the split is over receiver bins (every 4th bin held out as test). The MNEE grid size is chosen on training bins with a pilot seed; the baseline has no tuned knob. The reference is MNEE with more samples, so it shares the estimator family and any bias of it. Ideal refraction only: no Fresnel terms, no radiance scaling. Folds (zero Jacobian) and missed or non-converged roots are dropped, which can bias both methods. Equal sample budget is not equal compute; times are reported separately. This is a stand-in for the paper's Vulkan implementation, and the paper's reported result is not stated, so no agreement with it is claimed."
+}
